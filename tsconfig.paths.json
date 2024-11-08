@@ -3,12 +3,12 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "@image/*": ["public/image/*"],
-      "@assets/*": ["public/assets/*"],
-      "@hooks/*": ["public/hooks/*"],
+      "@image/*": ["src/public/assets/image/*"],
+      "@assets/*": ["src/public/assets/*"],
+      "@hooks/*": ["src/public/hooks/*"],
       "@styles/*": ["styles/*"],
-      "@utils/*": ["public/utils/*"],
-      "@components/*": ["components/*"]
+      "@utils/*": ["src/public/utils/*"],
+      "@components/*": ["src/components/*"]
     }
   }
 }
