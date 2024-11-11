@@ -9,7 +9,7 @@ export default function SignUp() {
     confirmPassword: "",
   });
 
-  const emailIsInvalid = !enteredValues.email.includes("@");
+  const emailValidation = enteredValues.email.includes('@');
 
   const [validationInfo, setValidationInfo] = React.useState({
     email: {
@@ -49,34 +49,28 @@ export default function SignUp() {
       [identifier]: value,
     });
 
-    if (identifier === "email") {
-      setValidationInfo({
-        ...validationInfo,
-        [identifier]: {
-          ...validationCheck.checkEmail(enteredValues[identifier]),
-          isBlurred: validationInfo[identifier].isBlurred,
-        },
-      });
-    } else if (identifier === "password") {
-      setValidationInfo({
-        ...validationInfo,
-        [identifier]: {
-          ...validationCheck.checkPassword(enteredValues[identifier]),
-          isBlurred: validationInfo[identifier].isBlurred,
-        },
-      });
-    } else {
-      setValidationInfo({
-        ...validationInfo,
-        [identifier]: {
-          ...validationCheck.comparePassword(
-            enteredValues["password"],
-            enteredValues["confirmPassword"]
-          ),
-          isBlurred: validationInfo[identifier].isBlurred,
-        },
-      });
-    }
+    console.log(
+      `CHECK :::: isBlur ::: ${validationInfo[identifier].isBlurred}//// ${JSON.stringify(validationCheck.check(
+        identifier,
+        enteredValues[identifier],
+        validationInfo["confirmPassword"].isBlurred
+          ? enteredValues["confirmPassword"]
+          : undefined
+      ))}`
+    );
+    setValidationInfo({
+      ...validationInfo,
+      [identifier]: {
+        ...validationCheck.check(
+          identifier,
+          enteredValues[identifier],
+          validationInfo["confirmPassword"].isBlurred
+            ? enteredValues["confirmPassword"]
+            : undefined
+        ),
+        isBlurred: validationInfo[identifier].isBlurred,
+      },
+    });
   }
 
   function handleSubmit(event: React.FormEvent) {
@@ -97,14 +91,14 @@ export default function SignUp() {
           value={enteredValues.email}
           onChange={(e) => inputChangeHandler("email", e.target.value)}
           onBlur={() => inputBlurHandler("email")}
+          required
         />
-        {validationInfo.email.isBlurred && emailIsInvalid ? (
-          <Form.Text className="text-muted">10자 이상 입력해주세요.</Form.Text>
-        ) : (
+        {(validationInfo.email.isBlurred &&
+        !emailValidation) ? (
           <Form.Text className="text-danger">
             {validationInfo.email.message}
           </Form.Text>
-        )}
+        ) : <Form.Text>왜 안되는데</Form.Text>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
