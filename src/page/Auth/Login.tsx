@@ -1,5 +1,6 @@
 import React from "react";
 import LoginForm from "./LoginForm";
+import { Link } from "react-router-dom";
 
 // import loginImg from '@image/loginImg';
 
@@ -15,6 +16,10 @@ export default function Login() {
           <span>Login</span>
         </div>
         <LoginForm />
+
+        <div>
+          <Link to={'/auth/signup'}>signup</Link>
+        </div>
       </div>
     </div>
   );
