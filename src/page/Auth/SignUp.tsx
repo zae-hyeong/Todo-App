@@ -1,76 +1,52 @@
 import React from "react";
 import { Button, Form } from "react-bootstrap";
-import validationCheck from "./Utils/validtaionCheck";
+import FormInput from "./Utils/FormInput";
 
 export default function SignUp() {
-  const [enteredValues, setEnteredValues] = React.useState({
+
+  const [enteredValues, setEnteredValues] = React.useState<{ [key: string]: string }>({
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const emailValidation = enteredValues.email.includes('@');
-
-  const [validationInfo, setValidationInfo] = React.useState({
-    email: {
-      isSuccessful: false,
-      isBlurred: false,
-      message: "",
+  const inputs = [
+    {
+      id: 1,
+      name: "email",
+      type: "email",
+      placeholder: "Email",
+      errorMessage: "It should be a valid email address!",
+      label: "Email",
+      pattern: `^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`,
+      required: true,
     },
-    password: {
-      isSuccessful: false,
-      isBlurred: false,
-      message: "",
+    {
+      id: 2,
+      name: "password",
+      type: "password",
+      placeholder: "Password",
+      errorMessage:
+        "Password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character!",
+      label: "Password",
+      pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+      required: true,
     },
-    confirmPassword: {
-      isSuccessful: false,
-      isBlurred: false,
-      message: "",
+    {
+      id: 3,
+      name: "confirmPassword",
+      type: "password",
+      placeholder: "Confirm Password",
+      errorMessage: "Passwords don't match!",
+      label: "Confirm Password",
+      pattern: enteredValues.password ? enteredValues.password : "",
+      required: true,
     },
-  });
+  ];
 
-  function inputBlurHandler(
-    identifier: "email" | "password" | "confirmPassword"
-  ) {
-    setValidationInfo({
-      ...validationInfo,
-      [identifier]: {
-        isBlurred: true,
-      },
-    });
-  }
-
-  function inputChangeHandler(
-    identifier: "email" | "password" | "confirmPassword",
-    value: string
-  ) {
-    setEnteredValues({
-      ...enteredValues,
-      [identifier]: value,
-    });
-
-    console.log(
-      `CHECK :::: isBlur ::: ${validationInfo[identifier].isBlurred}//// ${JSON.stringify(validationCheck.check(
-        identifier,
-        enteredValues[identifier],
-        validationInfo["confirmPassword"].isBlurred
-          ? enteredValues["confirmPassword"]
-          : undefined
-      ))}`
-    );
-    setValidationInfo({
-      ...validationInfo,
-      [identifier]: {
-        ...validationCheck.check(
-          identifier,
-          enteredValues[identifier],
-          validationInfo["confirmPassword"].isBlurred
-            ? enteredValues["confirmPassword"]
-            : undefined
-        ),
-        isBlurred: validationInfo[identifier].isBlurred,
-      },
-    });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEnteredValues((prev) => ({ ...prev, [name]: value }));
   }
 
   function handleSubmit(event: React.FormEvent) {
@@ -78,60 +54,22 @@ export default function SignUp() {
 
     const fd = new FormData(event.target as HTMLFormElement);
 
+    
+    //TODO: send server request
     const data = Object.fromEntries(fd.entries());
+    console.log(data);
   }
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
-        <Form.Control
-          placeholder="Enter email"
-          name="email"
-          value={enteredValues.email}
-          onChange={(e) => inputChangeHandler("email", e.target.value)}
-          onBlur={() => inputBlurHandler("email")}
-          required
-        />
-        {(validationInfo.email.isBlurred &&
-        !emailValidation) ? (
-          <Form.Text className="text-danger">
-            {validationInfo.email.message}
-          </Form.Text>
-        ) : <Form.Text>왜 안되는데</Form.Text>}
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          type="password"
-          placeholder="Password"
-          name="password"
-          value={enteredValues.password}
-          onChange={(e) => inputChangeHandler("password", e.target.value)}
-          onBlur={() => inputBlurHandler("password")}
-        />
-        {validationInfo.password.isBlurred &&
-        validationInfo.password.isSuccessful ? null : (
-          <Form.Text className="text-danger">
-            {validationInfo.password.message}
-          </Form.Text>
-        )}
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Confirm Password</Form.Label>
-        <Form.Control
-          type="password"
-          placeholder="Confirm Password"
-          name="confirmPassword"
-          value={enteredValues.confirmPassword}
-          onChange={(e) =>
-            inputChangeHandler("confirmPassword", e.target.value)
-          }
-          onBlur={() => inputBlurHandler("confirmPassword")}
-        />
-      </Form.Group>
-
+      {inputs.map((input) => (
+          <FormInput
+            key={input.id}
+            // value={enteredValues[input.name]}
+            onChange={handleChange}
+            {...input}
+          />
+        ))}
       <Button variant="primary" type="submit">
         Submit
       </Button>
