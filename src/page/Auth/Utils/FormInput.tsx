@@ -10,17 +10,14 @@ interface Props {
   label: string;
   pattern: string;
   required: boolean;
-  // value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function FormInput({
   id,
-  name,
   errorMessage,
   label,
   pattern,
-  // value,
   onChange,
   ...inputProps
 }: Props) {

@@ -1,8 +1,7 @@
 import React from 'react'
 import SignUpForm from './SignUpForm';
-type Props = {}
 
-export default function SignUp({}: Props) {
+export default function SignUp() {
   return (
     <div>
       <SignUpForm></SignUpForm>

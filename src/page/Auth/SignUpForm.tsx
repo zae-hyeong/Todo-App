@@ -1,10 +1,12 @@
 import React from "react";
 import { Button, Form } from "react-bootstrap";
 import FormInput from "./Utils/FormInput";
+import { createUserAPI } from "@/public/api";
 
 export default function SignupForm() {
-
-  const [enteredValues, setEnteredValues] = React.useState<{ [key: string]: string }>({
+  const [enteredValues, setEnteredValues] = React.useState<{
+    [key: string]: string;
+  }>({
     email: "",
     password: "",
     confirmPassword: "",
@@ -47,29 +49,28 @@ export default function SignupForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEnteredValues((prev) => ({ ...prev, [name]: value }));
-  }
+  };
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
     const fd = new FormData(event.target as HTMLFormElement);
+    // const data = Object.fromEntries(fd.entries());
 
-    console.log(fd.get("email"));
-    
-    //TODO: send server request
-    const data = Object.fromEntries(fd.entries());
-    console.log(data);
+    const res = createUserAPI({
+      email: fd.get("email") as string,
+      password: fd.get("password") as string,
+    });
+
+    res.then((data) => console.log(data.token));
+    // console.log();
   }
 
   return (
     <Form onSubmit={handleSubmit}>
       {inputs.map((input) => (
-          <FormInput
-            key={input.id}
-            onChange={handleChange}
-            {...input}
-          />
-        ))}
+        <FormInput key={input.id} onChange={handleChange} {...input} />
+      ))}
       <Button variant="primary" type="submit">
         Submit
       </Button>
