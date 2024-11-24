@@ -1,5 +1,6 @@
-import { saveToken } from "./localStorage";
+import { getToken, saveToken } from "./localStorage";
 import { loginInfo, loginResponse } from "./type/auth";
+import { TodoCardI } from "./utils/CardClass";
 
 const API_URL = "http://localhost:8080";
 
@@ -37,4 +38,30 @@ export async function loginAPI(loginData: loginInfo) {
     .catch((error) => alert(error));
 
   return response.status;
+}
+
+export async function getTodosAPI() {
+  const token = getToken();
+
+  if (!token) {
+    return new Array<TodoCardI>();
+  }
+
+  const response = await fetch(API_URL + "/todos", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": token,
+    },
+  });
+
+  response
+    .json()
+    .then((data) => {
+      return data.data as TodoCardI[];
+    })
+    .catch((error) => {
+      alert(error);
+    });
+  return new Array<TodoCardI>();
 }

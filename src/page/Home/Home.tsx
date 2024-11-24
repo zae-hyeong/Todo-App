@@ -3,27 +3,20 @@ import { Button, Stack } from "react-bootstrap";
 import { Plus } from "react-bootstrap-icons";
 import Header from "./Header";
 import TodoCard from "./TodoCard";
-import TodoCardClass, { TodoCardI } from "@/public/utils/CardClass";
+import { TodoCardI } from "@/public/utils/CardClass";
+import { getTodosAPI } from "@/public/api";
 
 export default function Home() {
   const [cards, setCards] = useState<TodoCardI[]>();
 
   useEffect(() => {
-    const tempCards: TodoCardI[] = [];
-    for (let i = 0; i < 5; i++) {
-      const c = new TodoCardClass({
-        title: "asdf",
-        content: "asdf",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        id: "asdgf",
-        img: null,
-      });
-      tempCards.push(c);
-    }
-    setCards(tempCards);
+    const fetchTodos = async () => {
+      const todos = await getTodosAPI();
+      setCards(todos);
+    };
+    fetchTodos();
   }, []);
-  
+
   return (
     <main>
       <Header />
