@@ -2,6 +2,8 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
 import FormInput from "./Utils/FormInput";
+import { loginAPI } from "@/public/api";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
   const [enteredValues, setEnteredValues] = React.useState<{
@@ -10,6 +12,8 @@ export default function LoginForm() {
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
 
   const inputs = [
     {
@@ -40,16 +44,19 @@ export default function LoginForm() {
     setEnteredValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
     const fd = new FormData(event.target as HTMLFormElement);
 
-    console.log(fd.get("email"));
+    const responseStatus = await loginAPI({
+      email: fd.get("email") as string,
+      password: fd.get("password") as string,
+    });
 
-    //TODO: send server request
-    const data = Object.fromEntries(fd.entries());
-    console.log(data);
+    if(responseStatus < 300 ) {
+      navigate('/home');
+    }
   }
 
   return (
@@ -57,7 +64,7 @@ export default function LoginForm() {
       {inputs.map((input) => (
         <FormInput key={input.id} onChange={handleChange} {...input} />
       ))}
-      <Button variant="primary" type="submit" >
+      <Button variant="primary" type="submit">
         Submit
       </Button>
     </Form>

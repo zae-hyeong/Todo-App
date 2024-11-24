@@ -1,19 +1,10 @@
 import { saveToken } from "./localStorage";
+import { loginInfo, loginResponse } from "./type/auth";
 
-const API_URL = 'http://localhost:8080'
-
-type loginInfo = {
-  email: string,
-  password: string
-}
-
-type loginResponse = {
-  message: string,
-  token: string
-}
+const API_URL = "http://localhost:8080";
 
 export async function createUserAPI(signinData: loginInfo) {
-  const response = await fetch(API_URL + '/users/create', {
+  const response = await fetch(API_URL + "/users/create", {
     method: "POST",
     body: JSON.stringify(signinData),
     headers: {
@@ -21,20 +12,29 @@ export async function createUserAPI(signinData: loginInfo) {
     },
   });
 
-  // saveToken(response.json().token);
-  // localStorage.setItem('token', response.json().token);
+  response
+    .json()
+    .then(() => {})
+    .catch((error) => alert(error));
 
-  return response.json();
+  return response.status;
 }
 
-export async function loginAPI(signinData: loginInfo) {
-  const response = await fetch(API_URL + '/users/create', {
-    method: "",
-    body: JSON.stringify(signinData),
+export async function loginAPI(loginData: loginInfo) {
+  const response = await fetch(API_URL + "/users/login", {
+    method: "POST",
+    body: JSON.stringify(loginData),
     headers: {
       "Content-Type": "application/json",
     },
   });
 
-  return response.json();
+  response
+    .json()
+    .then((data: loginResponse) => {
+      saveToken(data.token);
+    })
+    .catch((error) => alert(error));
+
+  return response.status;
 }

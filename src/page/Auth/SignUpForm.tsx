@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Form } from "react-bootstrap";
 import FormInput from "./Utils/FormInput";
 import { createUserAPI } from "@/public/api";
+import { useNavigate } from "react-router-dom";
 
 export default function SignupForm() {
   const [enteredValues, setEnteredValues] = React.useState<{
@@ -11,6 +12,8 @@ export default function SignupForm() {
     password: "",
     confirmPassword: "",
   });
+
+  const navigate = useNavigate();
 
   const inputs = [
     {
@@ -49,21 +52,23 @@ export default function SignupForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEnteredValues((prev) => ({ ...prev, [name]: value }));
-  };
+  }; 
 
-  function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
     const fd = new FormData(event.target as HTMLFormElement);
     // const data = Object.fromEntries(fd.entries());
 
-    const res = createUserAPI({
+    const responseStatus = await createUserAPI({
       email: fd.get("email") as string,
       password: fd.get("password") as string,
     });
+    console.log(responseStatus);
 
-    res.then((data) => console.log(data.token));
-    // console.log();
+    if(responseStatus < 300) {
+      navigate('/');
+    }
   }
 
   return (
