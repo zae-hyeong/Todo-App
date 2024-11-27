@@ -1,17 +1,12 @@
-import React from "react";
+import { createUserAPI } from "@/public/utils/api";
+import React, { useRef } from "react";
 import { Button, Form } from "react-bootstrap";
-import FormInput from "./Utils/FormInput";
-import { createUserAPI } from "@/public/api";
 import { useNavigate } from "react-router-dom";
+import FormInput from "./FormInput";
 
 export default function SignupForm() {
-  const [enteredValues, setEnteredValues] = React.useState<{
-    [key: string]: string;
-  }>({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+
+  const pwRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
 
@@ -44,26 +39,21 @@ export default function SignupForm() {
       placeholder: "Confirm Password",
       errorMessage: "Passwords don't match!",
       label: "Confirm Password",
-      pattern: enteredValues.password ? enteredValues.password : "",
+      pattern: pwRef.current?.value ?? "",
       required: true,
     },
   ];
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setEnteredValues((prev) => ({ ...prev, [name]: value }));
-  }; 
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
     const fd = new FormData(event.target as HTMLFormElement);
-    // const data = Object.fromEntries(fd.entries());
 
     const responseStatus = await createUserAPI({
       email: fd.get("email") as string,
       password: fd.get("password") as string,
     });
+
     console.log(responseStatus);
 
     if(responseStatus < 300) {
@@ -74,7 +64,7 @@ export default function SignupForm() {
   return (
     <Form onSubmit={handleSubmit}>
       {inputs.map((input) => (
-        <FormInput key={input.id} onChange={handleChange} {...input} />
+        <FormInput key={input.id} {...input} ref={input.id === 2 ? pwRef: null}/>
       ))}
       <Button variant="primary" type="submit">
         Submit

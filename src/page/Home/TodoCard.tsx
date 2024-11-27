@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Card } from "react-bootstrap";
-import { TodoCardI } from "@/public/utils/CardClass";
 import todoThumbnailExample from "@image/background.png";
+import { TodoCardI } from "@/public/type/todo";
 
 export default function TodoCardClass({card}: {card: TodoCardI}) {
   return (

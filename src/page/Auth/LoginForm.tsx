@@ -1,17 +1,11 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/esm/Button";
-import FormInput from "./Utils/FormInput";
-import { loginAPI } from "@/public/api";
 import { useNavigate } from "react-router-dom";
+import { loginAPI } from "@/public/utils/api";
+import FormInput from "./FormInput";
 
 export default function LoginForm() {
-  const [enteredValues, setEnteredValues] = React.useState<{
-    [key: string]: string;
-  }>({
-    email: "",
-    password: "",
-  });
 
   const navigate = useNavigate();
 
@@ -39,11 +33,6 @@ export default function LoginForm() {
     },
   ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setEnteredValues((prev) => ({ ...prev, [name]: value }));
-  };
-
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
@@ -62,7 +51,7 @@ export default function LoginForm() {
   return (
     <Form onSubmit={handleSubmit}>
       {inputs.map((input) => (
-        <FormInput key={input.id} onChange={handleChange} {...input} />
+        <FormInput key={input.id} {...input} />
       ))}
       <Button variant="primary" type="submit">
         Submit

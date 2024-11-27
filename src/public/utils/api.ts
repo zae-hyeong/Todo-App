@@ -1,6 +1,6 @@
+import { loginInfo, loginResponse } from "../type/auth";
+import { TodoCardI } from "../type/todo";
 import { getToken, saveToken } from "./localStorage";
-import { loginInfo, loginResponse } from "./type/auth";
-import { TodoCardI } from "./utils/CardClass";
 
 const API_URL = "http://localhost:8080";
 

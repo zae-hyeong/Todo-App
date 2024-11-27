@@ -3,8 +3,8 @@ import { Button, Stack } from "react-bootstrap";
 import { Plus } from "react-bootstrap-icons";
 import Header from "./Header";
 import TodoCard from "./TodoCard";
-import { TodoCardI } from "@/public/utils/CardClass";
-import { getTodosAPI } from "@/public/api";
+import { TodoCardI } from "@/public/type/todo";
+import { getTodosAPI } from "@/public/utils/api";
 
 export default function Home() {
   const [cards, setCards] = useState<TodoCardI[]>();

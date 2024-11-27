@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import { Form } from "react-bootstrap";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
   label: string;
   pattern: string;
   required: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  ref?: RefObject<HTMLInputElement> | null;
 }
 
 export default function FormInput({
@@ -18,7 +18,7 @@ export default function FormInput({
   errorMessage,
   label,
   pattern,
-  onChange,
+  ref,
   ...inputProps
 }: Props) {
   const [focused, setFocused] = React.useState(false);
@@ -32,7 +32,6 @@ export default function FormInput({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
-    onChange(e);
     setValid(new RegExp(pattern).test(e.target.value));
   };
 
@@ -44,6 +43,7 @@ export default function FormInput({
         value={inputValue}
         onChange={handleChange}
         onBlur={handleFocus}
+        ref={ref}
       />
       {focused && !valid && (
         <Form.Text className="text-danger">{errorMessage}</Form.Text>
