@@ -1,6 +1,6 @@
 import todoThumbnailExample from "@image/background.png";
 
-export type todo = {
+export type Todo = {
   title: string;
   content: string;
   id: string;

@@ -5,6 +5,7 @@ import Header from "./Header";
 import TodoCard from "./TodoCard";
 import { TodoCardI } from "@/public/type/todo";
 import { getTodosAPI } from "@/public/utils/api";
+import CreateTodoModal from "./CreateTodoModal";
 
 export default function Home() {
   const [cards, setCards] = useState<TodoCardI[]>();
@@ -33,6 +34,8 @@ export default function Home() {
           <Plus />
         </Button>
       </div>
+
+      <CreateTodoModal></CreateTodoModal>
     </main>
   );
 }
