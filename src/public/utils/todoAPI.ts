@@ -1,5 +1,5 @@
-import { Todo, TodoCardI } from "../type/todo";
-import { getToken, saveToken } from "./localStorage";
+import { createTodoRequestBody, TodoCardI } from "../type/todo";
+import { getToken } from "./localStorage";
 
 const API_URL = "http://localhost:8080";
 
@@ -7,6 +7,7 @@ export async function getTodosAPI() {
   const token = getToken();
 
   if (!token) {
+    console.error("Fail to get token");
     return [];
   }
 
@@ -19,51 +20,41 @@ export async function getTodosAPI() {
       },
     });
 
-    if(!response.ok) throw new Error('api request fail');
+    if (!response.ok) throw new Error("api request fail");
 
     const data = await response.json();
     return data.data;
   } catch (error) {
-    console.error('There was a problem with the fetch operation:', error);
+    console.error("There was a problem with the fetch operation:", error);
     return [];
   }
 }
 
-export async function createTodoAPI({
-  title,
-  content,
-}: {
-  title: string;
-  content: string;
-}) {
+export async function createTodoAPI({ title, content }: createTodoRequestBody) {
   const token = getToken();
 
   if (!token) {
-    // return new Array<TodoCardI>();
-    //TODO: 토큰이 없는 경우에 생기는 에러
+    console.error("Fail to get token");
+    return null;
   }
 
-  const reqestBody = {
-    title: title,
-    content: content,
-  };
-
+  try {
   const response = await fetch(API_URL + "/todos", {
     method: "POST",
-    body: JSON.stringify(reqestBody),
+    body: JSON.stringify({ title, content }),
     headers: {
       "Content-Type": "application/json",
-      Authorization: token!,
+      Authorization: token,
     },
   });
 
-  response
-    .json()
-    .then((data) => {
-      return data.data as Todo;
-    })
-    .catch((error) => {
-      alert(error);
-    });
-  return new Array<Todo>();
+  if (!response.ok) throw new Error("api request fail");
+
+  const data = await response.json();
+  return data.data as TodoCardI;
+
+  } catch(error) {
+    console.error("There was a problem with the fetch operation:", error);
+    return null;
+  }
 }

@@ -1,12 +1,9 @@
 import todoThumbnailExample from "@image/background.png";
 
-export type Todo = {
+export interface createTodoRequestBody {
   title: string;
   content: string;
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
+}
 
 export interface TodoCardI {
   title: string;

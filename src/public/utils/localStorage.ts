@@ -21,5 +21,9 @@ export function getToken() {
 }
 
 export function removeToken(tokenKey: string) {
-  localStorage.removeItem(tokenKey);
+  try {
+    localStorage.removeItem(tokenKey);
+  } catch (error) {
+    console.error(error);
+  }
 }
