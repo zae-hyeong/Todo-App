@@ -9,9 +9,10 @@ export function saveToken(token: string) {
 }
 
 export function getToken() {
-  const token = "";
+  let token = "";
+
   try {
-    localStorage.getItem(tokenKey);
+    token = localStorage.getItem(tokenKey)!;
   } catch (error) {
     console.error(error);
     return;

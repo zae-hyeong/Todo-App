@@ -1,8 +1,8 @@
-import { createUserAPI } from "@/public/utils/api";
 import React, { useRef } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import FormInput from "./FormInput";
+import { createUserAPI } from "@/public/utils/authAPI";
 
 export default function SignupForm() {
 

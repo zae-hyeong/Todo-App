@@ -4,8 +4,8 @@ import { Plus } from "react-bootstrap-icons";
 import Header from "./Header";
 import TodoCard from "./TodoCard";
 import { TodoCardI } from "@/public/type/todo";
-import { getTodosAPI } from "@/public/utils/api";
 import CreateTodoModal from "./CreateTodoModal";
+import { getTodosAPI } from "@/public/utils/todoAPI";
 
 export default function Home() {
   const [cards, setCards] = useState<TodoCardI[]>();
@@ -13,6 +13,7 @@ export default function Home() {
   useEffect(() => {
     const fetchTodos = async () => {
       const todos = await getTodosAPI();
+      console.log("asdfafasdf:: ", todos);
       setCards(todos);
     };
     fetchTodos();

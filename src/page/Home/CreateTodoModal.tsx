@@ -1,7 +1,7 @@
-import { createTodoAPI } from '@/public/utils/api';
 import * as React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import FormInput from '../Auth/FormInput';
+import { createTodoAPI } from '@/public/utils/todoAPI';
 
 
 export default function CreateTodoModal () {
@@ -12,21 +12,19 @@ export default function CreateTodoModal () {
 
     const fd = new FormData(event.target as HTMLFormElement);
 
+    console.log("fd result : ", fd.get("title") as string, fd.get("content") as string);
+
     const responseStatus = await createTodoAPI({
       title: fd.get("title") as string,
       content: fd.get("content") as string,
     });
 
     console.log(responseStatus);
-
-    // if(responseStatus < 300) {
-    //   navigate('/');
-    // }
   }
 
   return (
     <Form onSubmit={handleSubmit}>
-      <FormInput id={0} name='titile' type='text' placeholder={'title'} errorMessage={''} label={''} pattern={''} required={false} />
+      <FormInput id={0} name='title' type='text' placeholder={'title'} errorMessage={''} label={''} pattern={''} required={false} />
       <FormInput id={0} name='content' type='text' placeholder={'content'} errorMessage={''} label={''} pattern={''} required={false} />
     <Button variant="primary" type="submit">
       Submit
