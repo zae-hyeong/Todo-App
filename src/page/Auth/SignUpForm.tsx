@@ -5,7 +5,6 @@ import FormInput from "./FormInput";
 import { createUserAPI } from "@/public/utils/authAPI";
 
 export default function SignupForm() {
-
   const pwRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate();
@@ -49,22 +48,24 @@ export default function SignupForm() {
 
     const fd = new FormData(event.target as HTMLFormElement);
 
-    const responseStatus = await createUserAPI({
+    const token = await createUserAPI({
       email: fd.get("email") as string,
       password: fd.get("password") as string,
     });
 
-    console.log(responseStatus);
-
-    if(responseStatus < 300) {
-      navigate('/');
+    if (token) {
+      navigate("/");
     }
   }
 
   return (
     <Form onSubmit={handleSubmit}>
       {inputs.map((input) => (
-        <FormInput key={input.id} {...input} ref={input.id === 2 ? pwRef: null}/>
+        <FormInput
+          key={input.id}
+          {...input}
+          ref={input.id === 2 ? pwRef : null}
+        />
       ))}
       <Button variant="primary" type="submit">
         Submit

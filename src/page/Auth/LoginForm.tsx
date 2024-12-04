@@ -6,7 +6,6 @@ import FormInput from "./FormInput";
 import { loginAPI } from "@/public/utils/authAPI";
 
 export default function LoginForm() {
-
   const navigate = useNavigate();
 
   const inputs = [
@@ -38,13 +37,13 @@ export default function LoginForm() {
 
     const fd = new FormData(event.target as HTMLFormElement);
 
-    const responseStatus = await loginAPI({
+    const token = await loginAPI({
       email: fd.get("email") as string,
       password: fd.get("password") as string,
     });
 
-    if(responseStatus < 300 ) {
-      navigate('/home');
+    if (token) {
+      navigate("/home");
     }
   }
 
