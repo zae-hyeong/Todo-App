@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Stack } from "react-bootstrap";
 import { Plus } from "react-bootstrap-icons";
 import Header from "./Header";
@@ -10,6 +10,9 @@ import { getTodosAPI } from "@/public/utils/todoAPI";
 export default function Home() {
   const [cards, setCards] = useState<TodoCardI[]>();
 
+  const [openCreateTodoModal, setOpenCreateTodoModal] =
+    useState<boolean>(false);
+
   useEffect(() => {
     const fetchTodos = async () => {
       const todos = await getTodosAPI();
@@ -19,8 +22,18 @@ export default function Home() {
     fetchTodos();
   }, []);
 
+  const handleCreateTodoClick = {
+    open: () => {
+      setOpenCreateTodoModal(true);
+    },
+
+    close: () => {
+      setOpenCreateTodoModal(false);
+    },
+  };
+
   return (
-    <main>
+    <main id="home-root">
       <Header />
       <Button>목록</Button>
       <Button>상세 영역</Button>
@@ -28,15 +41,17 @@ export default function Home() {
       <div>
         <Stack gap={3} direction="horizontal">
           {cards?.map((card) => (
-            <TodoCard card={card}></TodoCard>
+            <TodoCard card={card} key={card.id} />
           ))}
         </Stack>
-        <Button>
+        <Button onClick={handleCreateTodoClick.open}>
           <Plus />
         </Button>
       </div>
 
-      <CreateTodoModal></CreateTodoModal>
+      {openCreateTodoModal && (
+        <CreateTodoModal onClose={handleCreateTodoClick.close} />
+      )}
     </main>
   );
 }
