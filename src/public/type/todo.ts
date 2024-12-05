@@ -1,6 +1,6 @@
 import todoThumbnailExample from "@image/background.png";
 
-export interface createTodoRequestBody {
+export interface todoRequestBody {
   title: string;
   content: string;
 }
