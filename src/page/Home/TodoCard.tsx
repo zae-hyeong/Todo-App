@@ -6,7 +6,7 @@ import UpdateTodoModal from "./UpdateTodoModal";
 import { X } from "react-bootstrap-icons";
 import { deleteTodoAPI } from "@/public/utils/todoAPI";
 
-export default function TodoCardClass({ card, deleteTodo }: { card: TodoCardI, deleteTodo: (todoId: string) => void }) {
+export default function TodoCardClass({ card, deleteTodo, updateTodo }: { card: TodoCardI, deleteTodo: (todoId: string) => void, updateTodo: (todo: TodoCardI) => void }) {
   const [openUpdateTodoModal, setOpenUpdateTodoModal] =
     useState<boolean>(false);
 
@@ -29,7 +29,7 @@ export default function TodoCardClass({ card, deleteTodo }: { card: TodoCardI, d
   return (
     <>
       {openUpdateTodoModal && (
-        <UpdateTodoModal todoId={card.id} onClose={handleUpdateTodoClick.close} />
+        <UpdateTodoModal todoId={card.id} onClose={handleUpdateTodoClick.close} updateTodo={updateTodo}/>
       )}
       <Card style={{ width: "18rem" }}>
       <button onClick={handleDeleteCardClick}>
@@ -40,7 +40,7 @@ export default function TodoCardClass({ card, deleteTodo }: { card: TodoCardI, d
           <Card.Title>{card.title}</Card.Title>
           <Card.Text>{card.content}</Card.Text>
           <Button variant="primary" onClick={handleUpdateTodoClick.open}>
-            Go somewhere
+            update Todo
           </Button>
         </Card.Body>
       </Card>

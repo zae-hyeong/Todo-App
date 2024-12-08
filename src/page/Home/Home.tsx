@@ -16,7 +16,6 @@ export default function Home() {
   useEffect(() => {
     const fetchTodos = async () => {
       const todos = await getTodosAPI();
-      console.log("asdfafasdf:: ", todos);
       setCards(todos);
     };
     fetchTodos();
@@ -33,12 +32,24 @@ export default function Home() {
   };
 
   function addNewTodo(todo: TodoCardI) {
-    setCards(todos => [...todos, todo]);
+    setCards((todos) => [...todos, todo]);
     handleCreateTodoClick.close();
   }
 
   function deleteTodo(todoId: string) {
     setCards((todos) => todos.filter((todo) => todo.id !== todoId));
+  }
+
+  function updateTodo(todo: TodoCardI) {
+    setCards((todos) =>
+      Array.from(
+        todos.map((t) => {
+          if (t.id === todo.id) return todo;
+          return t;
+        })
+      )
+    );
+    //TODO: Close Update todo
   }
 
   return (
@@ -50,7 +61,12 @@ export default function Home() {
       <div>
         <Stack gap={3} direction="horizontal">
           {cards?.map((card) => (
-            <TodoCard card={card} key={card.id} deleteTodo={deleteTodo} />
+            <TodoCard
+              card={card}
+              key={card.id}
+              deleteTodo={deleteTodo}
+              updateTodo={updateTodo}
+            />
           ))}
         </Stack>
         <Button onClick={handleCreateTodoClick.open}>
@@ -59,7 +75,10 @@ export default function Home() {
       </div>
 
       {openCreateTodoModal && (
-        <CreateTodoModal onClose={handleCreateTodoClick.close} addToTodos={addNewTodo}/>
+        <CreateTodoModal
+          onClose={handleCreateTodoClick.close}
+          addToTodos={addNewTodo}
+        />
       )}
     </main>
   );

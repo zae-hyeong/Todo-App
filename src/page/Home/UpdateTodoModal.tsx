@@ -4,25 +4,28 @@ import { X } from "react-bootstrap-icons";
 import FormInput from "../Auth/FormInput";
 import { updateTodoAPI } from "@/public/utils/todoAPI";
 import ReactDOM from "react-dom";
+import { TodoCardI } from "@/public/type/todo";
 
 export default function UpdateTodoModal({
   todoId,
   onClose,
+  updateTodo
 }: {
   todoId: string;
   onClose: () => void;
+  updateTodo: (todo: TodoCardI) => void;
 }) {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
     const fd = new FormData(event.target as HTMLFormElement);
 
-    const responseStatus = updateTodoAPI(todoId, {
+    const updatedTodo = await updateTodoAPI(todoId, {
       title: fd.get("title") as string,
       content: fd.get("content") as string,
     });
 
-    console.log(responseStatus);
+    if(updatedTodo) updateTodo(updatedTodo);
   }
 
   return ReactDOM.createPortal(
