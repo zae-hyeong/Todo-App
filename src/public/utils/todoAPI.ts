@@ -106,8 +106,9 @@ export async function deleteTodoAPI(todoId: string) {
 
   if (!response.ok) throw new Error("api request fail");
 
-  const data = await response.json();
-  return data.data;
+  await response.json();
+  
+  return todoId;
 
   } catch(error) {
     console.error("There was a problem with the fetch operation:", error);

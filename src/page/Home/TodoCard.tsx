@@ -6,7 +6,7 @@ import UpdateTodoModal from "./UpdateTodoModal";
 import { X } from "react-bootstrap-icons";
 import { deleteTodoAPI } from "@/public/utils/todoAPI";
 
-export default function TodoCardClass({ card }: { card: TodoCardI }) {
+export default function TodoCardClass({ card, deleteTodo }: { card: TodoCardI, deleteTodo: (todoId: string) => void }) {
   const [openUpdateTodoModal, setOpenUpdateTodoModal] =
     useState<boolean>(false);
 
@@ -23,6 +23,7 @@ export default function TodoCardClass({ card }: { card: TodoCardI }) {
   const handleDeleteCardClick = () => {
     deleteTodoAPI(card.id);
     //TODO: 성공하면 이 카드 지워야 함.
+    deleteTodo(card.id);
   }
 
   return (

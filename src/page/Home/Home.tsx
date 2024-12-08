@@ -8,7 +8,7 @@ import CreateTodoModal from "./CreateTodoModal";
 import { getTodosAPI } from "@/public/utils/todoAPI";
 
 export default function Home() {
-  const [cards, setCards] = useState<TodoCardI[]>();
+  const [cards, setCards] = useState<TodoCardI[]>([]);
 
   const [openCreateTodoModal, setOpenCreateTodoModal] =
     useState<boolean>(false);
@@ -32,6 +32,15 @@ export default function Home() {
     },
   };
 
+  function addNewTodo(todo: TodoCardI) {
+    setCards(todos => [...todos, todo]);
+    handleCreateTodoClick.close();
+  }
+
+  function deleteTodo(todoId: string) {
+    setCards((todos) => todos.filter((todo) => todo.id !== todoId));
+  }
+
   return (
     <main id="home-root">
       <Header />
@@ -41,7 +50,7 @@ export default function Home() {
       <div>
         <Stack gap={3} direction="horizontal">
           {cards?.map((card) => (
-            <TodoCard card={card} key={card.id} />
+            <TodoCard card={card} key={card.id} deleteTodo={deleteTodo} />
           ))}
         </Stack>
         <Button onClick={handleCreateTodoClick.open}>
@@ -50,7 +59,7 @@ export default function Home() {
       </div>
 
       {openCreateTodoModal && (
-        <CreateTodoModal onClose={handleCreateTodoClick.close} />
+        <CreateTodoModal onClose={handleCreateTodoClick.close} addToTodos={addNewTodo}/>
       )}
     </main>
   );
