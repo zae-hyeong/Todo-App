@@ -5,14 +5,17 @@ import FormInput from "../Auth/FormInput";
 import { createTodoAPI } from "@/public/utils/todoAPI";
 import ReactDOM from "react-dom";
 import { TodoCardI } from "@/public/type/todo";
+import { useRecoilState } from "recoil";
+import { openCreateTodoModal as createTodoModalAtom } from "@/public/state/states";
 
-export default function CreateTodoModal({
-  onClose,
-  addToTodos,
-}: {
-  onClose: () => void;
+interface Props {
   addToTodos: (todo: TodoCardI) => void;
-}) {
+}
+
+export default function CreateTodoModal({ addToTodos }: Props) {
+  const [, setOpenCreateTodoModal] =
+    useRecoilState<boolean>(createTodoModalAtom);
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
 
@@ -28,7 +31,11 @@ export default function CreateTodoModal({
 
   return ReactDOM.createPortal(
     <dialog open>
-      <button onClick={onClose}>
+      <button
+        onClick={() => {
+          setOpenCreateTodoModal(false);
+        }}
+      >
         <X />
       </button>
       <h2>Create</h2>
