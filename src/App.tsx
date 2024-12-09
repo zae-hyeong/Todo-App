@@ -1,10 +1,10 @@
 import React from "react";
 import "./App.css";
-import Home from "@/page/Home/Home";
+import Home from "@/page/Todos/Home";
 import Login from "@/page/Auth/Login";
 import SignUp from "@/page/Auth/SignUp";
+import TodoDetail from "./page/Todos/TodoDetail";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import TodoDetail from "./page/Todo/TodoDetail";
 
 function App() {
   const router = createBrowserRouter([
@@ -12,20 +12,11 @@ function App() {
     {
       path: "/todos",
       children: [
-        {
-          path: "",
-          element: <Home />,
-        },
-        {
-          path: "asdf/:todoId",
-          element: <TodoDetail />,
-        },
+        { path: "", element: <Home /> },
+        { path: ":todoId", element: <TodoDetail /> },
       ],
     },
-    {
-      path: "/auth/signup",
-      element: <SignUp />,
-    },
+    { path: "/auth/signup", element: <SignUp /> },
   ]);
 
   return (

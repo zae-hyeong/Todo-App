@@ -43,7 +43,7 @@ export default function LoginForm() {
     });
 
     if (token) {
-      navigate("/home");
+      navigate("/todos");
     }
   }
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Button, Stack } from "react-bootstrap";
 import { Plus } from "react-bootstrap-icons";
 import Header from "./Header";
 import TodoCard from "./TodoCard";
@@ -20,20 +19,10 @@ export default function Home() {
     };
     fetchTodos();
   }, []);
-
-  const handleCreateTodoClick = {
-    open: () => {
-      setOpenCreateTodoModal(true);
-    },
-
-    close: () => {
-      setOpenCreateTodoModal(false);
-    },
-  };
-
+  
   function addNewTodo(todo: TodoCardI) {
     setCards((todos) => [...todos, todo]);
-    handleCreateTodoClick.close();
+    setOpenCreateTodoModal(false);
   }
 
   function deleteTodo(todoId: string) {
@@ -55,28 +44,31 @@ export default function Home() {
   return (
     <main id="home-root">
       <Header />
-      <Button>목록</Button>
-      <Button>상세 영역</Button>
       <h1>Your Todo List</h1>
-      <div>
-        <Stack gap={3} direction="horizontal">
+      <div className="container ">
+        <div className="row">
           {cards?.map((card) => (
             <TodoCard
               card={card}
               key={card.id}
               deleteTodo={deleteTodo}
               updateTodo={updateTodo}
+              className={"col-4"}
             />
           ))}
-        </Stack>
-        <Button onClick={handleCreateTodoClick.open}>
+        </div>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => {setOpenCreateTodoModal(true)}}
+        >
           <Plus />
-        </Button>
+        </button>
       </div>
 
       {openCreateTodoModal && (
         <CreateTodoModal
-          onClose={handleCreateTodoClick.close}
+          onClose={() => {setOpenCreateTodoModal(false)}}
           addToTodos={addNewTodo}
         />
       )}

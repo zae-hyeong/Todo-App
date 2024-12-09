@@ -8,6 +8,7 @@ function TodoDetail() {
 
   return (
     <div>
+      <div>{params.todoId}</div>
       <div>todo Title</div>
       <div>todo Content</div>
     </div>
