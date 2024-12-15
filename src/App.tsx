@@ -5,6 +5,7 @@ import Login from "@/page/Auth/Login";
 import SignUp from "@/page/Auth/SignUp";
 import TodoDetail from "./page/Todos/TodoDetail";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
 function App() {
   const router = createBrowserRouter([
@@ -21,7 +22,9 @@ function App() {
 
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      <RecoilRoot>
+        <RouterProvider router={router} />
+      </RecoilRoot>
     </div>
   );
 }

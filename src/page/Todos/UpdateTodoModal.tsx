@@ -5,17 +5,19 @@ import FormInput from "../Auth/FormInput";
 import { updateTodoAPI } from "@/public/utils/todoAPI";
 import ReactDOM from "react-dom";
 import { TodoCardI } from "@/public/type/todo";
-import { openUpdateTodoModal as updateTodoModalAtom } from "@/public/state/states";
+import { todos as todosAtom } from "@/public/state/states";
 import { useRecoilState } from "recoil";
 
 interface Props {
   todoId: string;
-  updateTodo: (todo: TodoCardI) => void;
+  setOpenUpdateTodoModal: (open: boolean) => void;
 }
 
-export default function UpdateTodoModal({ todoId, updateTodo }: Props) {
-  const [, setOpenUpdateTodoModal] =
-    useRecoilState<boolean>(updateTodoModalAtom);
+export default function UpdateTodoModal({
+  todoId,
+  setOpenUpdateTodoModal,
+}: Props) {
+  const [, setTodos] = useRecoilState<TodoCardI[]>(todosAtom);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -27,7 +29,18 @@ export default function UpdateTodoModal({ todoId, updateTodo }: Props) {
       content: fd.get("content") as string,
     });
 
-    if (updatedTodo) updateTodo(updatedTodo);
+    if (updatedTodo) {
+      setTodos((todos) =>
+        Array.from(
+          todos.map((t) => {
+            console.log("t.id ::", t.id, " / ", "todoId ::", todoId);
+            if (t.id === todoId) return updatedTodo;
+            return t;
+          })
+        )
+      );
+      setOpenUpdateTodoModal(false);
+    }
   }
 
   return ReactDOM.createPortal(
@@ -36,6 +49,7 @@ export default function UpdateTodoModal({ todoId, updateTodo }: Props) {
         <X />
       </button>
       <h2>Update</h2>
+      <h2>{todoId}</h2>
       <Form onSubmit={handleSubmit}>
         <FormInput
           id={0}

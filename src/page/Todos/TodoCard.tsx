@@ -5,44 +5,41 @@ import UpdateTodoModal from "./UpdateTodoModal";
 import { X } from "react-bootstrap-icons";
 import { deleteTodoAPI } from "@/public/utils/todoAPI";
 import { Link } from "react-router-dom";
-import { openUpdateTodoModal as updateTodoModalAtom } from "@/public/state/states";
+import { todos as todoAtom } from "@/public/state/states";
 import { useRecoilState } from "recoil";
+import { useState } from "react";
 
-interface Props {
-  card: TodoCardI;
-  className: string;
-  deleteTodo: (todoId: string) => void;
-  updateTodo: (todo: TodoCardI) => void;
-}
-
-export default function TodoCardClass({
-  card,
-  className,
-  deleteTodo,
-  updateTodo,
-}: Props) {
-
+export default function TodoCardClass({ todo }: { todo: TodoCardI }) {
   const [openUpdateTodoModal, setOpenUpdateTodoModal] =
-    useRecoilState<boolean>(updateTodoModalAtom);
+    useState<boolean>(false);
 
-  const handleDeleteCardClick = () => {
-    deleteTodoAPI(card.id);
-    deleteTodo(card.id);
-  };
+  const [, setTodos] = useRecoilState<TodoCardI[]>(todoAtom);
+
+  function deleteTodo(todoId: string) {
+    setTodos((todos) => todos.filter((todo) => todo.id !== todoId));
+  }
 
   return (
     <>
-      <Card style={{ width: "18rem" }}>
-        <button onClick={handleDeleteCardClick}>
+      <Card className="col-3">
+        <button
+          onClick={() => {
+            deleteTodoAPI(todo.id);
+            deleteTodo(todo.id);
+          }}
+        >
           <X />
         </button>
-        <Link to={`/todos/${card.id}`} className={className}>
-          <Card.Img variant="top" src={card.img ?? todoThumbnailExample} />
+        <Link to={`/todos/${todo.id}`}>
+          <Card.Img variant="top" src={todo.img ?? todoThumbnailExample} />
         </Link>
         <Card.Body>
-          <Card.Title>{card.title}</Card.Title>
-          <Card.Text>{card.content}</Card.Text>
-          <Button variant="primary" onClick={() => setOpenUpdateTodoModal(true)}>
+          <Card.Title>{todo.title}</Card.Title>
+          <Card.Text>{todo.content}</Card.Text>
+          <Button
+            variant="primary"
+            onClick={() => setOpenUpdateTodoModal(true)}
+          >
             update Todo
           </Button>
         </Card.Body>
@@ -50,8 +47,8 @@ export default function TodoCardClass({
 
       {openUpdateTodoModal && (
         <UpdateTodoModal
-          todoId={card.id}
-          updateTodo={updateTodo}
+          todoId={todo.id}
+          setOpenUpdateTodoModal={setOpenUpdateTodoModal}
         />
       )}
     </>

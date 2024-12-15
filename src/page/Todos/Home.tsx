@@ -8,8 +8,7 @@ import { getTodosAPI } from "@/public/utils/todoAPI";
 import { useRecoilState } from "recoil";
 import {
   todos as todoAtom,
-  openCreateTodoModal as createTodoModalAtom,
-  openUpdateTodoModal as updateTodoModalAtom,
+  openCreateTodoModal as createTodoModalAtom
 } from "@/public/state/states";
 
 export default function Home() {
@@ -17,9 +16,6 @@ export default function Home() {
 
   const [openCreateTodoModal, setOpenCreateTodoModal] =
     useRecoilState<boolean>(createTodoModalAtom);
-
-  const [, setOpenUpdateTodoModal] =
-    useRecoilState<boolean>(updateTodoModalAtom);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -29,40 +25,16 @@ export default function Home() {
     fetchTodos();
   }, [setTodos]);
 
-  function addNewTodo(todo: TodoCardI) {
-    setTodos((todos) => [...todos, todo]);
-    setOpenCreateTodoModal(false);
-  }
-
-  function deleteTodo(todoId: string) {
-    setTodos((todos) => todos.filter((todo) => todo.id !== todoId));
-  }
-
-  function updateTodo(todo: TodoCardI) {
-    setTodos((todos) =>
-      Array.from(
-        todos.map((t) => {
-          if (t.id === todo.id) return todo;
-          return t;
-        })
-      )
-    );
-    setOpenUpdateTodoModal(false);
-  }
-
   return (
     <main id="home-root">
       <Header />
       <h1>Your Todo List</h1>
       <div className="container ">
         <div className="row">
-          {todos?.map((card) => (
+          {todos?.map((todo) => (
             <TodoCard
-              card={card}
-              key={card.id}
-              deleteTodo={deleteTodo}
-              updateTodo={updateTodo}
-              className={"col-4"}
+              todo={todo}
+              key={todo.id}
             />
           ))}
         </div>
@@ -77,7 +49,7 @@ export default function Home() {
         </button>
       </div>
 
-      {openCreateTodoModal && <CreateTodoModal addToTodos={addNewTodo} />}
+      {openCreateTodoModal && <CreateTodoModal />}
     </main>
   );
 }

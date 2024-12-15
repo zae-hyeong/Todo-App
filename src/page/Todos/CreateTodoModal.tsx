@@ -6,15 +6,16 @@ import { createTodoAPI } from "@/public/utils/todoAPI";
 import ReactDOM from "react-dom";
 import { TodoCardI } from "@/public/type/todo";
 import { useRecoilState } from "recoil";
-import { openCreateTodoModal as createTodoModalAtom } from "@/public/state/states";
+import {
+  todos as todoAtom,
+  openCreateTodoModal as createTodoModalAtom,
+} from "@/public/state/states";
 
-interface Props {
-  addToTodos: (todo: TodoCardI) => void;
-}
-
-export default function CreateTodoModal({ addToTodos }: Props) {
+export default function CreateTodoModal() {
   const [, setOpenCreateTodoModal] =
     useRecoilState<boolean>(createTodoModalAtom);
+
+  const [, setTodos] = useRecoilState<TodoCardI[]>(todoAtom);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -26,7 +27,10 @@ export default function CreateTodoModal({ addToTodos }: Props) {
       content: fd.get("content") as string,
     });
 
-    if (newTodo) addToTodos(newTodo);
+    if (newTodo) {
+      setTodos((todos) => [...todos, newTodo]);
+      setOpenCreateTodoModal(false);
+    }
   }
 
   return ReactDOM.createPortal(
